@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ความในใจอยากบอกคุณ</title>
+  <link rel="icon" type="image/png" href="../Love/assests/h.gif">
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #fffbe6;
+      margin: 0;
+      padding: 20px;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    .page {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    #choice-buttons button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #not-btn {
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="container">
+    <div class="page active">
+      <h1>นี่ๆเธอ...</h1>
+      <img src="../Love/assests/1.jpg" alt="love1">
+      <button onclick="nextPage()">ถัดไป</button>
+    </div>
+    <div class="page">
+      <h1>เรามีอะไรจะบอก...</h1>
+      <img src="../Love/assests/2.gif" alt="love2">
+      <button onclick="nextPage()">ถัดไป</button>
+    </div>
+    <div class="page">
+      <h1>เราชอบเธอมานานแล้ว</h1>
+      <img src="../Love/assests/4.gif" alt="love3">
+      <button onclick="nextPage()">ถัดไป</button>
+    </div>
+    <div class="page" id="final-page">
+      <h1>เป็นแฟนกับเราได้มั้ย?</h1>
+      <img src="../Love/assests/5.gif" alt="love4">
+      <h2>ตอบเราหน่อยน้า</h2>
+      <div id="choice-buttons">
+        <button id="yes-btn">เป็น 💖</button>
+        <button id="not-btn">ไม่เป็น 😢</button>
+      </div>
+    </div>
+
+    <div class="page" id="response-page">
+      <h2 id="final-msg"></h2>
+      <img id="final-pic" src="" style="max-width: 300px; margin-top: 10px;" />
+      <br/>
+      <textarea id="user-msg" placeholder="อยากบอกอะไรกับเรา..."></textarea><br>
+      <button onclick="sendMessage()">ส่งข้อความ</button>
+    </div>
+  </div>
+
+  <script>
+    const pages = document.querySelectorAll('.page');
+    let currentPage = 0;
+
+    function nextPage() {
+      pages[currentPage].classList.remove('active');
+      currentPage++;
+      if (currentPage < pages.length) {
+        pages[currentPage].classList.add('active');
+      }
+    }
+
+    let notClickCount = 0;
+    const notBtn = document.getElementById('not-btn');
+    const yesBtn = document.getElementById('yes-btn');
+    const finalMsg = document.getElementById('final-msg');
+    const finalPic = document.getElementById('final-pic');
+    const responsePage = document.getElementById('response-page');
+
+    notBtn.addEventListener('mouseover', () => {
+      if (notClickCount < 3) {
+        notBtn.style.position = 'absolute';
+        notBtn.style.top = Math.random() * window.innerHeight * 0.8 + 'px';
+        notBtn.style.left = Math.random() * window.innerWidth * 0.8 + 'px';
+        notClickCount++;
+      }
+    });
+
+    notBtn.addEventListener('click', () => {
+      if (notClickCount >= 3) {
+        pages[currentPage].classList.remove('active');
+        responsePage.classList.add('active');
+        finalMsg.textContent = 'แงง เสียดายจัง 😭';
+        finalPic.src = '../Love/assests/6.gif';
+        choice = 'ไม่เป็น';
+      }
+    });
+
+    let choice = '';
+    yesBtn.addEventListener('click', () => {
+      pages[currentPage].classList.remove('active');
+      responsePage.classList.add('active');
+      finalMsg.textContent = 'เย่ ดีใจที่สุดเลย 💖';
+      finalPic.src = '../Love/assests/7.gif';
+      choice = 'เป็น';
+    });
+
+    function sendMessage() {
+      const msg = document.getElementById('user-msg').value;
+      const fullMsg = choice === 'เป็น'
+        ? `นายจะมีแฟนแล้ว! เธอบอกเราว่า: ${msg}`
+        : `อกหักนะไอ้หนุ่ม เธอบอกว่า: ${msg}`;
+
+      const url = `https://api.telegram.org/bot7623976463:AAGR_rxV5KQSAh9hL8uBEJ0bY-FUnWvdMHE/sendMessage`;
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: "7814794691",
+          text: fullMsg
+        })
+      }).then(() => {
+        <!-- alert("ส่งข้อความเรียบร้อยแล้ว!"); -->
+        if (choice === 'เป็น') {
+            window.location.href = 'https://youtu.be/VUh4cVfvgK0?si=GUq4e7u__YWcaZ7X'; 
+          } else {          
+            window.location.href = 'https://youtu.be/VUh4cVfvgK0?si=GUq4e7u__YWcaZ7X'; 
+          }
+      });
+    }
+  </script>
+</body>
+</html>
